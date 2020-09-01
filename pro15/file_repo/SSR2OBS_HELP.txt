@@ -1,0 +1,74 @@
+Options:
+  -pid[=]nnn   - use SSR Provider ID nnn [default -1 == any]
+  -sid[=]nnn   - use SSR Solution ID nnn [default -1 == any]
+  -i=address   - rover pos and time from GGA+ZDA input [tcp_addr:port,port,comX,...]
+  +syst        - assume system time beeing correct to a few minutes (then NMEA ZDA not required)
+  -o[=]address - RTCM output address or '-', which means do output to GGA channel
+  -oss[=]port  - RTCM output simplex server port number
+  -ont         - enable fake NTRIP server on RTCM output server
+  -ri[=]x.x    - output interval [1.0]
+  -ro[=]x.x    - output offset to last GGA [0.8]
+  -re[=]x      - output epoch offset to last GGA [1.0]
+  -sn[=]name   - set shared SSR name [gppssrdb.sdb]
+  -dgp[=]NAME  - enable Shrd DGP output with name NAME
+  -rtcm        - enable RTCM output
+  -rtcmmsm     - enable RTCM MSM output (with SSRZ input only)
+  -rtcmid[=]n  - set RtcmReferenceStationId to n for RTCM output [0=auto]
+  -sm          - enable shared memory Ephemeris
+  -n[=]name    - set GN_IP rcvr_id to name (default: shrd DGP name or TCP/IP output
+                 server port or process PID
+  -nognip      - don't start GN_IP thread (implies '-C' argument)
+  -C           - do not connect to GNMAIN
+  -ssrdatum=NAME  - assume SSR is in datum NAME
+  -refdatum=NAME  - datum for DGP/RTCM output
+  -datumdef=FNAME - datum trafo defined in file FNAME
+  -maxa[=]x.x  - max SSR age (seconds after end of epoch validity) [15.0]
+  -mina[=]x.x  - min SSR age (seconds before start of epoch validity) [-5.0]
+  -minsv[=]n   - minimum number of SVs per GNSS [2]
+  -rdist[=]n   - distance of virtual reference from user position [100m]
+  -rupd[=]x.x  - update virtual reference position at most every x.x s or not at all [-1.0s]
+  -rfix[=]B,L,h - fixed virtual reference position [deg,deg,m] with
+                  B = latitude x.xxxx,  L = longitude x.xxxx, h = ellips. height
+  -glo[=]xxx   - introduce GLONASS observation biases for GLO Class xxx
+                 (use -glo=? to show possible GLO classes xxx)
+  -g           - disable GLONASS data output
+  -1029dbg[=]n - enable ssr2obs epoch status output via RTCM 1029 UTF8 message [0]
+  -dly[=]x.x   - startup delay [0.0] s
+  -creq[=]x    - set required SSR parameters required for using SSR epochs, sum of:
+                 1=CodeBias, 2=PhaseBias, 4=Clock, 8=Orbit, 16=HRClock, 32=URA,
+                 64=VTEC, 128=STEC, 4096=TropoGrid.  Default is 207
+  -cdis[=]x    - set which SSR parameters are to be ignored/discarded. See -creq option
+                 for description of parameter x. Default is 0
+  -ptides[=]n  - include permanent tides' influence in output [0|1], default is 0
+  -tropo[=]n   - which troposphere model to use [2|3|4|5|25|35|45|55], default is 45
+
+SSRZ input Options:
+  -z=address           - activate SSRZ mode and connect to SSRZ server address [tcp_addr:port]
+  -N=name[,user:pwd]   - select SSRZ NTRIP source name with User:Password
+  -MC=group-addr[,if]  - join UDP multicast group on specified interface
+                          (to be used with '-z=portnumS'), with:
+                          group-addr - multicast address
+                          if         - network interface IP address []
+  -eph=address         - read ephemerides messages from server address [tcp_addr:port]
+
+Testing/Debugging Options:
+  -unfix_sv    - add DGP flag PHCL without integer or widelane ambiguity fix flag also
+  -always_ph   - add DGP flag PHCL without phase bias SSR also
+  -xstropo     - disable use of SSR troposphere
+  -debug[=]n   - enable debug output, n is bitmask for different debug info:
+                  Epoch=1, SsrStore=2, Ephem=4, Ssr2Osr=8, Osr2Dgp=16, Osr2Rtcm=32,
+                  GGA/ZDA=64, RtcmEpoch=128, Gpsd=256, GNIP=512, SSRZ/RTCM3IN=1024,
+                  SSRZ_decode=2048, GNS2O=4096, ...
+  +dLS=NAME    - enable stdout logging (redirection) to file [GN_DATA\]NAMEddds.out
+  +dLE=NAME    - enable stderr logging (redirection) to file [GN_DATA\]NAMEddds.err
+  +dLE         - redirect stderr output into stdout file/pipe
+  +dPOS=NAME   - enable rover position/GGA loggin to file [GN_DATA\]NAMEddds.log
+  -dnb         - SSR debug option: delayed_next_best epoch
+  -prof        - enable runtime profiling
+
+RTCM SSR Input Options:
+  -ssr_in=FNAME  - start SSR_IN thread(s) with options given in FNAME options file
+                   Use standalone 'ssr_in -?' to list possible options.
+                   If no '-sn' option is given to ssr2obs, shared in-memory
+                   database will be used.
+  -ssr_in::      - start SSR_IN thread(s), treat all following cmdline args as ssr_in args

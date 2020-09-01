@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>login using javascript</title>
+<script type="text/javascript">
+
+	function fn_validate(){
+		
+		var frmLogin = document.frmLogin;
+		var user_id=frmLogin.user_id.value;
+		var user_pw=frmLogin.user_pw.value;
+		
+		if((user_id.length==0 || user_id == "") || (user_pw.length == 0 || user_pw == "")){
+			alert("아이디와 비밀번호는 필수입니다.");
+		}else{
+			frmLogin.method="post";
+			frmLogin.action="login5";
+			frmLogin.submit();
+		}
+	}
+</script>
+</head>
+
+<body>
+
+	<form action="login" name="frmLogin" method="post" enctype="utf-8">
+	
+		<table>
+			<tr>
+				<td>ID : </td>
+				<td><input type="text" name="user_id"/></td>
+			</tr>
+			<tr>
+				<td>PW : </td>
+				<td><input type="text" name="user_pw"/></td>
+			</tr>
+			<tr>
+				<td>집 주소 : </td>
+				<td><input type="text" name="address"/></td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<input type="button" onclick="fn_validate()" value="로그인"/>
+					<input type="reset" value="다시 입력"/>
+				</td>
+				
+			</tr>
+		</table>
+	</form>
+	
+</body>
+</html>

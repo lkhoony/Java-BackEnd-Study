@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Login Window</title>
+</head>
+<body>
+	<form action="login4" name="frmLogin" method="post" enctype="UTF-8">
+	<!-- action 속성에서 서블릿 매핑 이름이 login인 서블릿으로 전송 -->
+	<!-- action : form을 전송할 서버 쪽 스크립트 파일을 지정 -->
+		<table>
+			<tr>
+				<td>ID</td>
+				<td><input type="text" name="user_id"/></td>
+			</tr>
+			<tr>
+				<td>PW</td>
+				<td><input type="password" name="user_pw"/></td>
+			</tr>
+			<tr>
+				<td><input type="submit" value="login"/></td>
+				<td><input type="reset" value="reset"/></td>
+			</tr>
+		</table>
+	
+	</form>
+</body>
+</html>

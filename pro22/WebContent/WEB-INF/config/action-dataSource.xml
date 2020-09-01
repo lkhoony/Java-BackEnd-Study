@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans   
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+http://www.springframework.org/schema/aop
+http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+
+  <!-- 
+  ## locations 프로퍼티의 값에는 콤마나 공백으로 구분된 프로퍼티 파일 목록이 오며, 프로퍼티 파일에 포함된 프로퍼티의 값은 '${프로퍼티의 이름}' 형식으로 사용할 수 있다. 
+    즉, 위 코드에서 ${jdbc.driver}는 프로퍼티 파일의 jdbc.driver 프로퍼티의 값으로 대체된다.
+  -->
+  
+  <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">      
+    <property name="locations">
+      <list>
+        <value>/WEB-INF/config/jdbc.properties</value>
+      </list>
+    </property>
+  </bean>
+  
+  <bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+    <property name="driverClass" value="${jdbc.driverClassName}"></property>
+    <property name="url" value="${jdbc.url}"></property>
+    <property name="username" value="${jdbc.username}"></property>
+    <property name="password" value="${jdbc.password}"></property>
+  </bean>
+  
+  <bean id="memberDAO" class="com.spring.member.dao.MemberDAOImpl">
+    <property name="dataSource" ref="dataSource"></property>
+  </bean>
+</beans>
