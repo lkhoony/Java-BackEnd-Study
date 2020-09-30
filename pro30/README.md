@@ -38,11 +38,16 @@
 - Servlet Context에 정의된 Bean은 Application Context의 Bean을 사용할 수 있다.
 
 ### (3) Context를 나누는 기준
-- Application Context
-	- 공통 기능을 할 수 있는 Bean설정 (Datasource, Service 등..)
-	- 각 Servlet에서 공유할 수 있는 Bean
-- Servlet Context
-	- Servlet 구성에 필요한 Bean 설정 (Controller, Interceptor, MappingHandler등..)
+
+#### Application Context
+
+- 공통 기능을 할 수 있는 Bean설정 (Datasource, Service 등..)
+
+- 각 Servlet에서 공유할 수 있는 Bean
+
+#### Servlet Context
+
+- Servlet 구성에 필요한 Bean 설정 (Controller, Interceptor, MappingHandler등..)
 
 ## 2. web.xml 설정
 > Web Application Deployment Description에 어떤 내용이 들어가는지 살펴보자
