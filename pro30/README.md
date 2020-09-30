@@ -96,3 +96,117 @@
 </web-app>
 ```
 
+### (1) action-mybatis.xml
+
+- Application Context설정을 위한 설정 파일로써 Database 연결에 필요한 정보와 Bean들을 설정(jdbc.properties, sqlSessionFactory, sqlSession 등)
+
+- mybatis를 사용하기 위해 설정되는 modelConfig.xml과 mapper파일 (board.xml, member.xml 등)이 입력됨
+
+```
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans   
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+http://www.springframework.org/schema/aop
+http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+  <!-- PropertyPlaceholderConfig : 외부의 프로퍼티에 저장된 정보를 스프링 설정파일에서 사용할 수 있음 -->
+  <bean id="propertyPlaceholderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="location">
+      <value>/WEB-INF/config/jdbc/jdbc.properties</value>
+    </property>
+  </bean>
+  
+  <bean id="dataSource" class="org.apache.ibatis.datasource.pooled.PooledDataSource">
+    <property name="driver" value="${jdbc.driverClassName}"></property>
+    <property name="url" value="${jdbc.url}"></property>
+    <property name="username" value="${jdbc.username}"></property>
+    <property name="password" value="${jdbc.password}"></property>
+  </bean>
+  
+  <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+    <property name="dataSource" ref="dataSource"></property>
+    <property name="configLocation" value="classpath:mybatis/model/modelConfig.xml"></property>
+    <property name="mapperLocations" value="classpath:mybatis/mappers/*.xml"></property>
+  </bean>
+  
+  <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+    <constructor-arg index="0" ref="sqlSessionFactory"></constructor-arg>
+  </bean>
+  
+</beans>
+```
+
+### (2) servlet-context.xml
+
+- Servlet Context를 위한 설정파일로 View Resolver, Tiles, Interceptors 등을 설정
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+	
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<annotation-driven />
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+	<resources mapping="/resources/**" location="/resources/" />
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+	<!-- 
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+	 -->
+	 
+	<!-- tiles configure -->
+	 <beans:bean id="tilesConfigure" class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
+	 	<beans:property name="definitions">
+	 		<beans:list>
+	 			<beans:value>classpath:tiles/*.xml</beans:value>
+	 		</beans:list>
+	 	</beans:property>
+	 	<beans:property name="preparerFactoryClass" value="org.springframework.web.servlet.view.tiles2.SpringBeanPreparerFactory">
+	 	</beans:property>
+	 </beans:bean>
+	 
+	 <!-- view resolver -->
+	 <beans:bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+	 	<beans:property name="viewClass" value="org.springframework.web.servlet.view.tiles2.TilesView"></beans:property>
+	 </beans:bean>
+	 
+	 <!-- interceptor -->
+	 <mvc:interceptors>
+	 	<mvc:interceptor>
+	 		<mvc:mapping path="/*/*.do"/>
+	 		<beans:bean class="com.myspring.pro30.common.interceptor.ViewNameInterceptor"></beans:bean>
+	 	</mvc:interceptor>
+	 </mvc:interceptors>
+	 
+	 <context:component-scan base-package="com.myspring.pro30" />
+	 
+</beans:beans>
+```
+
+### (3) component-scan
+
+- base-package에 입력된 대상에서 어노테이션(@Controller, @Component 등)으로 설정된 클래스들을 Bean으로 등록해주는 Filter 속성
+
+```
+<!-- com.myspring.pro30에 있는 모든 어노테이션으로 설정된 클래스들을 Bean으로 등록 -->
+<context:component-scan base-package="com.myspring.pro30" />
+```
