@@ -54,6 +54,8 @@
 
 - WAS 구동 시 /WEB-INF 디렉토리에 존재하는 web.xml을 읽어 웹 어플리케이션의 설정을 구성
 
+- Application Context인 action-mybatis.xml과 Servlet Context인 servlet-context.xml을 설정
+
 ```
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
